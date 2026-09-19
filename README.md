@@ -15,7 +15,8 @@ I designed and loaded a small sales database for a fictional shop, **Sunrise Sup
 
 Concretely:
 
-1. Created the four tables given in the assignment (`customers`, `products`, `orders`, `order_items`) exactly as specified, using Oracle data types (`NUMBER`, `VARCHAR2`, `DATE`).
+1. Created the four tables given in the assignment (`customers`, `products`, `orders`, `order_items`) exactly as specified, using Oracle data types (`NUMBER`, `VARCHAR2`, `DATE`).<img width="701" height="338" alt="image" src="https://github.com/user-attachments/assets/2fe92223-614c-49d3-bbb6-bab29a9e8318" />
+
 2. Populated them with realistic sample data: **5 customers, 8 products across 4 categories, 15 orders and 29 order items**, spread across January–March 2025.
 3. Wrote **3 JOIN queries** (INNER JOIN, JOIN, LEFT JOIN), **1 CTE query** (customers spending above average) and **4 window-function queries** (RANK, ROW\_NUMBER, running SUM, LAG).
 4. Ran every query, captured the results, and wrote a business interpretation of what the numbers say about Sunrise Supermarket.
