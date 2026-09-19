@@ -520,7 +520,7 @@ Re-running `02_insert_data.sql` produced `ORA-00001: unique constraint violated`
 ## 9. Repository structure
 
 ```
-assignment_1_gaby-<your_id>/
+assignment_1_InezaLisaGabrielle-28527/
 ├── README.md                   <- this file
 └── sql/
     ├── 01_schema.sql           <- table definitions
@@ -538,6 +538,6 @@ git init
 git add .
 git commit -m "Assignment 1: Sunrise Supermarket SQL analysis"
 git branch -M main
-git remote add origin https://github.com/<your-username>/assignment_1_gaby-<your_id>.git
+git remote add origin https://github.com/inezalisagabrielle-gif/assignment_1_InezaLisaGabrielle-28527.git
 git push -u origin main
 ```
