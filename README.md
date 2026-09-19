@@ -1,11 +1,10 @@
 # assignment_1_InezaLisaGabrielle-28527
 # Assignment 1 — Sunrise Supermarket Sales Analysis (SQL)
 
-**Name:** Gaby
-**Student ID:** _(fill in your student ID here before pushing)_
-**Course:** Information Systems and Technology — AUCA
+**Name:** INEZA Lisa Gabrielle
+**Student ID:** _28527_
 **DBMS used:** **Oracle Database 21c XE**, scripts written and run in Oracle SQL Developer (they also run in SQL\*Plus).
-**Repository name:** `assignment_1_gaby-<your_id>`
+**Repository name:** `assignment_1_InezaLisaGabrielle_28527`
 
 ---
 
