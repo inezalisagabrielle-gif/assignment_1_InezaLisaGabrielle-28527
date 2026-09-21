@@ -1,0 +1,45 @@
+- ---------------------------------------------------------
+-- Query 1 (INNER JOIN): every order with the customer's
+-- name, city and order date.
+-- ---------------------------------------------------------
+SELECT o.order_id,
+       c.customer_name,
+       c.city,
+       TO_CHAR(o.order_date, 'YYYY-MM-DD') AS order_date
+FROM   orders o
+INNER JOIN customers c
+       ON o.customer_id = c.customer_id
+ORDER BY o.order_date, o.order_id;
+
+
+-- ---------------------------------------------------------
+-- Query 2 (JOIN order_items + products): every order line
+-- with product name, category, unit price and quantity.
+-- line_total is added so the value of each line is visible.
+-- ---------------------------------------------------------
+SELECT oi.order_item_id,
+       oi.order_id,
+       p.product_name,
+       p.category,
+       p.price,
+       oi.quantity,
+       p.price * oi.quantity AS line_total
+FROM   order_items oi
+INNER JOIN products p
+       ON oi.product_id = p.product_id
+ORDER BY oi.order_item_id;
+
+
+-- ---------------------------------------------------------
+-- Query 3 (LEFT JOIN): all customers plus their orders,
+-- including customers who have never ordered.
+-- ---------------------------------------------------------
+SELECT c.customer_id,
+       c.customer_name,
+       c.city,
+       o.order_id,
+       TO_CHAR(o.order_date, 'YYYY-MM-DD') AS order_date
+FROM   customers c
+LEFT JOIN orders o
+       ON c.customer_id = o.customer_id
+ORDER BY c.customer_id, o.order_date;

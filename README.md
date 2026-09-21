@@ -136,6 +136,7 @@ INNER JOIN customers c
        ON o.customer_id = c.customer_id
 ORDER BY o.order_date, o.order_id;
 ```
+<img width="740" height="434" alt="image" src="https://github.com/user-attachments/assets/b1de3d55-a1fa-4da6-8cc3-55f9f06b9721" />
 
 **Explanation.** The `orders` table only stores `customer_id`, which is a number and means nothing to a manager reading a report. The INNER JOIN follows that foreign key into `customers` and pulls back the readable name and city. `INNER` means a row is returned only when the join condition matches on both sides — so an order without a valid customer, or a customer without orders, would not appear. Since every order must belong to a customer, all 15 orders come back.
 
@@ -176,6 +177,7 @@ INNER JOIN products p
        ON oi.product_id = p.product_id
 ORDER BY oi.order_item_id;
 ```
+<img width="943" height="400" alt="image" src="https://github.com/user-attachments/assets/eb405381-3da2-4985-b3a7-1e2e8a447110" />
 
 **Explanation.** Same idea one level down. `order_items` stores only `product_id` and `quantity`; the name, category and price live in `products`. Joining on `product_id` turns each line into something readable. I also added a calculated column `line_total = price × quantity`, because that multiplication is the basis of every revenue figure later in this report.
 
@@ -230,6 +232,7 @@ LEFT JOIN orders o
        ON c.customer_id = o.customer_id
 ORDER BY c.customer_id, o.order_date;
 ```
+<img width="842" height="373" alt="image" src="https://github.com/user-attachments/assets/810ee049-21c5-483b-9034-b08f4a3d0bd8" />
 
 **Explanation.** A LEFT JOIN keeps **every** row from the left table (`customers`) whether or not a match exists on the right. Where a customer has no orders, Oracle fills `order_id` and `order_date` with NULL instead of dropping the customer. That is exactly the difference from Query 1: an INNER JOIN here would return 15 rows and hide Denise completely. The LEFT JOIN returns 16 rows and makes the inactive customer visible — which is precisely the row management needs to see.
 
@@ -284,6 +287,7 @@ CROSS JOIN average_spend a
 WHERE  ct.total_spend > a.avg_spend
 ORDER BY ct.total_spend DESC;
 ```
+<img width="838" height="371" alt="image" src="https://github.com/user-attachments/assets/151ae9b1-9a7a-43a0-9547-0fda9fa51d91" />
 
 **Explanation, step by step.**
 
@@ -329,6 +333,7 @@ SELECT customer_id,
 FROM   customer_totals
 ORDER BY spend_rank;
 ```
+<img width="826" height="386" alt="image" src="https://github.com/user-attachments/assets/6d97bf7a-39a4-4d5c-8c41-146b5398abc8" />
 
 **Explanation.** The CTE produces one row per customer with their total. `RANK() OVER (ORDER BY total_spend DESC)` then numbers those rows from the biggest spender down. There is no `PARTITION BY`, so the window is the whole result set — one single ranking. I chose `RANK()` rather than `ROW_NUMBER()` because if two customers tied on spend, `RANK()` would give them the same rank (and then skip the next number), which is the honest representation of a tie; `ROW_NUMBER()` would arbitrarily put one ahead of the other.
 
@@ -355,6 +360,7 @@ FROM   orders o
 JOIN   customers c ON c.customer_id = o.customer_id
 ORDER BY c.customer_name, order_sequence;
 ```
+<img width="842" height="392" alt="image" src="https://github.com/user-attachments/assets/ea1da63e-f1f6-4028-a8df-c0578602a79f" />
 
 **Explanation.** `PARTITION BY o.customer_id` restarts the counter for every customer, and `ORDER BY o.order_date` decides the sequence. So each customer's earliest order is numbered 1, the next is 2, and so on. `order_id` is added as a tie-breaker in case a customer ever placed two orders on the same date, so the numbering is deterministic. This is the standard way to find a customer's first purchase (`order_sequence = 1`) or their most recent one.
 
@@ -398,6 +404,7 @@ SELECT TO_CHAR(order_date, 'YYYY-MM-DD') AS order_date,
 FROM   daily_revenue
 ORDER BY order_date;
 ```
+<img width="816" height="383" alt="image" src="https://github.com/user-attachments/assets/8e2f5899-8533-4f88-ad10-000a2e153dbd" />
 
 **Explanation.** The CTE first collapses the order lines into one revenue figure per date. Then `SUM(...) OVER (ORDER BY order_date ...)` adds up every day's revenue from the first date through to the current row — that is what makes it *running* rather than a single grand total. The frame clause `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` states that explicitly: start at the very first row, stop at this one. I wrote the frame out instead of relying on the default because the default (`RANGE`) treats rows with equal dates as a single group; being explicit removes any ambiguity.
 
@@ -427,7 +434,7 @@ The final running total, 224,600 RWF, matches the sum of all order lines from Qu
 
 ### Window Query 4 — Days between a customer's current and previous order
 
----sql
+```sql
 WITH order_gaps AS (
     SELECT c.customer_id,
            c.customer_name,
@@ -448,6 +455,8 @@ FROM   order_gaps
 WHERE  orders_by_customer > 1
 ORDER BY customer_name, order_date;
 ```
+
+<img width="841" height="383" alt="image" src="https://github.com/user-attachments/assets/b73d0e24-f12f-4af9-864b-22da065fb292" />
 
 **Explanation.** `LAG()` looks backwards one row inside the window and returns a value from it — here, the previous order's date for that same customer. `PARTITION BY o.customer_id` is essential: without it, `LAG` would grab the previous order of a *different* customer and the gaps would be meaningless. In Oracle, subtracting one `DATE` from another returns a number of days directly, so `order_date - previous_order_date` gives the gap.
 
