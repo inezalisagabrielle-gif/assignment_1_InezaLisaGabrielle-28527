@@ -177,6 +177,7 @@ INNER JOIN products p
        ON oi.product_id = p.product_id
 ORDER BY oi.order_item_id;
 ```
+<img width="943" height="400" alt="image" src="https://github.com/user-attachments/assets/eb405381-3da2-4985-b3a7-1e2e8a447110" />
 
 **Explanation.** Same idea one level down. `order_items` stores only `product_id` and `quantity`; the name, category and price live in `products`. Joining on `product_id` turns each line into something readable. I also added a calculated column `line_total = price × quantity`, because that multiplication is the basis of every revenue figure later in this report.
 
