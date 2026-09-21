@@ -136,6 +136,7 @@ INNER JOIN customers c
        ON o.customer_id = c.customer_id
 ORDER BY o.order_date, o.order_id;
 ```
+<img width="740" height="434" alt="image" src="https://github.com/user-attachments/assets/b1de3d55-a1fa-4da6-8cc3-55f9f06b9721" />
 
 **Explanation.** The `orders` table only stores `customer_id`, which is a number and means nothing to a manager reading a report. The INNER JOIN follows that foreign key into `customers` and pulls back the readable name and city. `INNER` means a row is returned only when the join condition matches on both sides — so an order without a valid customer, or a customer without orders, would not appear. Since every order must belong to a customer, all 15 orders come back.
 
