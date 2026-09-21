@@ -434,7 +434,7 @@ The final running total, 224,600 RWF, matches the sum of all order lines from Qu
 
 ### Window Query 4 — Days between a customer's current and previous order
 
----sql
+```sql
 WITH order_gaps AS (
     SELECT c.customer_id,
            c.customer_name,
@@ -455,6 +455,7 @@ FROM   order_gaps
 WHERE  orders_by_customer > 1
 ORDER BY customer_name, order_date;
 ```
+
 <img width="841" height="383" alt="image" src="https://github.com/user-attachments/assets/b73d0e24-f12f-4af9-864b-22da065fb292" />
 
 **Explanation.** `LAG()` looks backwards one row inside the window and returns a value from it — here, the previous order's date for that same customer. `PARTITION BY o.customer_id` is essential: without it, `LAG` would grab the previous order of a *different* customer and the gaps would be meaningless. In Oracle, subtracting one `DATE` from another returns a number of days directly, so `order_date - previous_order_date` gives the gap.
