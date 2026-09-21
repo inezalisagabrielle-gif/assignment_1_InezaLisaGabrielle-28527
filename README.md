@@ -333,6 +333,7 @@ SELECT customer_id,
 FROM   customer_totals
 ORDER BY spend_rank;
 ```
+<img width="826" height="386" alt="image" src="https://github.com/user-attachments/assets/6d97bf7a-39a4-4d5c-8c41-146b5398abc8" />
 
 **Explanation.** The CTE produces one row per customer with their total. `RANK() OVER (ORDER BY total_spend DESC)` then numbers those rows from the biggest spender down. There is no `PARTITION BY`, so the window is the whole result set — one single ranking. I chose `RANK()` rather than `ROW_NUMBER()` because if two customers tied on spend, `RANK()` would give them the same rank (and then skip the next number), which is the honest representation of a tie; `ROW_NUMBER()` would arbitrarily put one ahead of the other.
 
@@ -359,6 +360,7 @@ FROM   orders o
 JOIN   customers c ON c.customer_id = o.customer_id
 ORDER BY c.customer_name, order_sequence;
 ```
+<img width="842" height="392" alt="image" src="https://github.com/user-attachments/assets/ea1da63e-f1f6-4028-a8df-c0578602a79f" />
 
 **Explanation.** `PARTITION BY o.customer_id` restarts the counter for every customer, and `ORDER BY o.order_date` decides the sequence. So each customer's earliest order is numbered 1, the next is 2, and so on. `order_id` is added as a tie-breaker in case a customer ever placed two orders on the same date, so the numbering is deterministic. This is the standard way to find a customer's first purchase (`order_sequence = 1`) or their most recent one.
 
@@ -402,6 +404,7 @@ SELECT TO_CHAR(order_date, 'YYYY-MM-DD') AS order_date,
 FROM   daily_revenue
 ORDER BY order_date;
 ```
+<img width="816" height="383" alt="image" src="https://github.com/user-attachments/assets/8e2f5899-8533-4f88-ad10-000a2e153dbd" />
 
 **Explanation.** The CTE first collapses the order lines into one revenue figure per date. Then `SUM(...) OVER (ORDER BY order_date ...)` adds up every day's revenue from the first date through to the current row — that is what makes it *running* rather than a single grand total. The frame clause `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW` states that explicitly: start at the very first row, stop at this one. I wrote the frame out instead of relying on the default because the default (`RANGE`) treats rows with equal dates as a single group; being explicit removes any ambiguity.
 
@@ -452,6 +455,7 @@ FROM   order_gaps
 WHERE  orders_by_customer > 1
 ORDER BY customer_name, order_date;
 ```
+<img width="841" height="383" alt="image" src="https://github.com/user-attachments/assets/b73d0e24-f12f-4af9-864b-22da065fb292" />
 
 **Explanation.** `LAG()` looks backwards one row inside the window and returns a value from it — here, the previous order's date for that same customer. `PARTITION BY o.customer_id` is essential: without it, `LAG` would grab the previous order of a *different* customer and the gaps would be meaningless. In Oracle, subtracting one `DATE` from another returns a number of days directly, so `order_date - previous_order_date` gives the gap.
 
