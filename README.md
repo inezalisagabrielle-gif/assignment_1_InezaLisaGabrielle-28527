@@ -232,6 +232,7 @@ LEFT JOIN orders o
        ON c.customer_id = o.customer_id
 ORDER BY c.customer_id, o.order_date;
 ```
+<img width="842" height="373" alt="image" src="https://github.com/user-attachments/assets/810ee049-21c5-483b-9034-b08f4a3d0bd8" />
 
 **Explanation.** A LEFT JOIN keeps **every** row from the left table (`customers`) whether or not a match exists on the right. Where a customer has no orders, Oracle fills `order_id` and `order_date` with NULL instead of dropping the customer. That is exactly the difference from Query 1: an INNER JOIN here would return 15 rows and hide Denise completely. The LEFT JOIN returns 16 rows and makes the inactive customer visible — which is precisely the row management needs to see.
 
