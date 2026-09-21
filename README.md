@@ -287,6 +287,7 @@ CROSS JOIN average_spend a
 WHERE  ct.total_spend > a.avg_spend
 ORDER BY ct.total_spend DESC;
 ```
+<img width="838" height="371" alt="image" src="https://github.com/user-attachments/assets/151ae9b1-9a7a-43a0-9547-0fda9fa51d91" />
 
 **Explanation, step by step.**
 
